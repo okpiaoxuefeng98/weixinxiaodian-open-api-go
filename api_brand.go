@@ -29,9 +29,10 @@ BrandGet 获取品牌列表
 获取品牌列表
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param accessToken 访问权限token
+ * @param body
 @return BrandGetRsp
 */
-func (a *BrandApiService) BrandGet(ctx _context.Context, accessToken string) (BrandGetRsp, *_nethttp.Response, error) {
+func (a *BrandApiService) BrandGet(ctx _context.Context, accessToken string, body map[string]interface{}) (BrandGetRsp, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -49,7 +50,7 @@ func (a *BrandApiService) BrandGet(ctx _context.Context, accessToken string) (Br
 
 	localVarQueryParams.Add("access_token", parameterToString(accessToken, ""))
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
+	localVarHTTPContentTypes := []string{"application/json"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -65,6 +66,8 @@ func (a *BrandApiService) BrandGet(ctx _context.Context, accessToken string) (Br
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	// body params
+	localVarPostBody = &body
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err

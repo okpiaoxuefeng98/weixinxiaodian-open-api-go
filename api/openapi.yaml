@@ -252,6 +252,12 @@ paths:
         required: true
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+        required: true
       responses:
         "200":
           content:
@@ -262,6 +268,7 @@ paths:
       summary: 获取品牌列表
       tags:
       - brand
+      x-codegen-request-body-name: body
   /product/delivery/get_freight_template:
     post:
       description: 获取运费模板

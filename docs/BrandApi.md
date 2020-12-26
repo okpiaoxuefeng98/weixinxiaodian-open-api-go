@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## BrandGet
 
-> BrandGetRsp BrandGet(ctx, accessToken)
+> BrandGetRsp BrandGet(ctx, accessToken, body)
 
 获取品牌列表
 
@@ -23,6 +23,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **accessToken** | **string**| 访问权限token | 
+**body** | **map[string]interface{}**|  | 
 
 ### Return type
 
@@ -34,7 +35,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
