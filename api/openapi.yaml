@@ -1,0 +1,4682 @@
+openapi: 3.0.1
+info:
+  description: wei xin xiao shang dian open api
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: 微信小商店开放API
+  version: 1.0.0
+servers:
+- url: https://api.weixin.qq.com/
+tags:
+- description: shop
+  name: shop
+paths:
+  /product/register/check_audit_status:
+    post:
+      description: 异步状态查询
+      operationId: check_audit_status
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          application/json:
+            schema:
+              properties:
+                wx_name:
+                  type: string
+              required:
+              - wx_name
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckAuditStatusRsp'
+          description: successful operation
+      summary: 异步状态查询
+      tags:
+      - register
+      x-codegen-request-body-name: body
+  /product/register/register_shop:
+    post:
+      description: 注册小商店账号
+      operationId: register_shop
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_1'
+        content:
+          application/json:
+            schema:
+              properties:
+                wx_name:
+                  description: 微信号
+                  type: string
+                id_card_name:
+                  description: 身份证姓名
+                  type: string
+                id_card_number:
+                  description: 身份证号
+                  type: string
+                api_openstore_type:
+                  description: 1-整店打包，2-组件开放
+                  format: int32
+                  type: integer
+                channel_id:
+                  description: 渠道号
+                  format: int32
+                  type: integer
+              required:
+              - api_openstore_type
+              - id_card_name
+              - id_card_number
+              - wx_name
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterShopRsp'
+          description: successful operation
+      summary: 注册小商店账号
+      tags:
+      - register
+      x-codegen-request-body-name: body
+  /product/register/submit_merchantinfo:
+    post:
+      description: 提交支付资质
+      operationId: submit_merchantinfo
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_2'
+        content:
+          application/json:
+            schema:
+              properties:
+                appid:
+                  type: string
+                subject_type:
+                  description: 主体类型,"4"-个体工商户，营业执照上的主体类型一般为个体户、个体工商户、个体经营。"2"-企业，营业执照上的主体类型一般为有限公司、有限责任公司。
+                  type: string
+                busi_license:
+                  $ref: '#/components/schemas/BusiLicense'
+                organization_code_info:
+                  $ref: '#/components/schemas/OrganizationCodeInfo'
+                id_card_info:
+                  $ref: '#/components/schemas/IdCardInfo'
+                super_administrator_info:
+                  $ref: '#/components/schemas/SuperAdministratorInfo'
+                merchant_shortname:
+                  description: 商户简称 UTF-8格式，中文占3个字节，即最多16个汉字长度。将在支付完成页向买家展示，需与商家的实际售卖商品相符
+                    。示例值：腾讯
+                  type: string
+                special_qualification:
+                  description: 特殊资质 1、根据商户经营业务要求提供相关资质，详情查看《行业对应特殊资质》。2、请提供为“申请商家主体”所属的特殊资质，可授权使用总公司/分公司的特殊资
+                    质；3、最多可上传5张照片，请填写通过图片上传接口预先上传图片生成好的MediaID 。
+                  items:
+                    $ref: '#/components/schemas/SuperAdministratorInfo'
+                  type: array
+                supplementary_material:
+                  description: 补充材料
+                  items:
+                    $ref: '#/components/schemas/SuperAdministratorInfo'
+                  type: array
+                supplementary_desc:
+                  description: 补充描述
+                  type: string
+              required:
+              - appid
+              - busi_license
+              - id_card_info
+              - merchant_shortname
+              - subject_type
+              - super_administrator_info
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitMerchantinfo'
+          description: successful operation
+      summary: 提交支付资质
+      tags:
+      - register
+      x-codegen-request-body-name: body
+  /product/register/submit_basicinfo:
+    post:
+      description: 提交小商店基础信息
+      operationId: submit_basicinfo
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_3'
+        content:
+          application/json:
+            schema:
+              properties:
+                appid:
+                  type: string
+                name_info:
+                  $ref: '#/components/schemas/NameInfo'
+                return_info:
+                  $ref: '#/components/schemas/ReturnInfo'
+              required:
+              - appid
+              - name_info
+              - return_info
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitBasicinfo'
+          description: successful operation
+      summary: 提交小商店基础信息
+      tags:
+      - register
+      x-codegen-request-body-name: body
+  /product/category/get:
+    post:
+      description: 获取类目详情
+      operationId: category_get
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_4'
+        content:
+          application/json:
+            schema:
+              properties:
+                f_cat_id:
+                  format: int64
+                  type: integer
+              required:
+              - f_cat_id
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryGetRsp'
+          description: successful operation
+      summary: 获取类目详情
+      tags:
+      - category
+      x-codegen-request-body-name: body
+  /product/brand/get:
+    post:
+      description: 获取品牌列表
+      operationId: brand_get
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandGetRsp'
+          description: successful operation
+      summary: 获取品牌列表
+      tags:
+      - brand
+  /product/delivery/get_freight_template:
+    post:
+      description: 获取运费模板
+      operationId: delivery_get_freight_template
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryGetFreightTemplateRsp'
+          description: successful operation
+      summary: 获取运费模板
+      tags:
+      - delivery
+  /product/store/get_shopcat:
+    post:
+      description: 获取店铺的商品分类
+      operationId: store_get_shopcat
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreGetShopcatRsp'
+          description: successful operation
+      summary: 获取店铺的商品分类
+      tags:
+      - store
+  /product/spu/add:
+    post:
+      description: 添加商品
+      operationId: spu_add
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpuAddReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuAddRsp'
+          description: successful operation
+      summary: 添加商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/del:
+    post:
+      description: 删除商品
+      operationId: spu_del
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_5'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 小商店内部商品ID，与out_product_id二选一
+                  format: int64
+                  type: integer
+                out_product_id:
+                  description: 商家自定义商品ID，与product_id二选一
+                  type: string
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuDelRsp'
+          description: successful operation
+      summary: 删除商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/get:
+    post:
+      description: 获取商品
+      operationId: spu_get
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_6'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 小商店内部商品ID，与out_product_id二选一
+                  format: int64
+                  type: integer
+                out_product_id:
+                  description: 商家自定义商品ID，与product_id二选一
+                  type: string
+                need_edit_spu:
+                  description: 默认0:获取线上数据, 1:获取草稿数据
+                  format: int32
+                  type: integer
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuGetRsp'
+          description: successful operation
+      summary: 获取商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/get_list:
+    post:
+      description: 获取商品列表
+      operationId: spu_get_list
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_7'
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  description: 商品状态
+                  format: int32
+                  type: integer
+                page:
+                  description: 第几页（最小填1）
+                  format: int32
+                  type: integer
+                page_size:
+                  description: 每页数量(不超过10,000)
+                  format: int32
+                  type: integer
+                need_edit_spu:
+                  description: 默认0:获取线上数据, 1:获取草稿数据
+                  format: int32
+                  type: integer
+              required:
+              - page
+              - page_size
+              - status
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuGetListRsp'
+          description: successful operation
+      summary: 获取商品列表
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/search:
+    post:
+      description: 搜索商品
+      operationId: spu_search
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_8'
+        content:
+          application/json:
+            schema:
+              properties:
+                keyword:
+                  type: string
+                page:
+                  description: 第几页（最小填1）
+                  format: int32
+                  type: integer
+                page_size:
+                  description: 每页数量(不超过10,000)
+                  format: int32
+                  type: integer
+              required:
+              - keyword
+              - page
+              - page_size
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuSearchRsp'
+          description: successful operation
+      summary: 搜索商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/update:
+    post:
+      description: 更新商品
+      operationId: spu_update
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpuUpdateReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuUpdateRsp'
+          description: successful operation
+      summary: 更新商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/listing:
+    post:
+      description: 上架商品
+      operationId: spu_listing
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_9'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  format: int64
+                  type: integer
+                out_product_id:
+                  type: string
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuListingRsp'
+          description: successful operation
+      summary: 上架商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/spu/delisting:
+    post:
+      description: 下架商品
+      operationId: spu_delisting
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_10'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  format: int64
+                  type: integer
+                out_product_id:
+                  type: string
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpuDelistingRsp'
+          description: successful operation
+      summary: 下架商品
+      tags:
+      - spu
+      x-codegen-request-body-name: body
+  /product/sku/add:
+    post:
+      description: 添加SKU
+      operationId: sku_add
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkuAddReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuAddRsp'
+          description: successful operation
+      summary: 添加SKU
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/sku/batch_add:
+    post:
+      description: 批量添加SKU
+      operationId: sku_batch_add
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkuBatchAddReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuBatchAddRsp'
+          description: successful operation
+      summary: 批量添加SKU
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/sku/del:
+    post:
+      description: 删除SKU
+      operationId: sku_del
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_11'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 小商店内部商品ID，与out_product_id二选一
+                  format: int64
+                  type: integer
+                out_product_id:
+                  description: 商家自定义商品ID，与product_id二选一
+                  type: string
+                sku_id:
+                  description: out_sku_id、sku_id 二选一
+                  format: int64
+                  type: integer
+                out_sku_id:
+                  description: out_sku_id、sku_id二选一
+                  type: string
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuDelRsp'
+          description: successful operation
+      summary: 删除SKU
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/sku/get:
+    post:
+      description: 获取商品
+      operationId: sku_get
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_12'
+        content:
+          application/json:
+            schema:
+              properties:
+                sku_id:
+                  description: out_sku_id、sku_id 二选一
+                  format: int64
+                  type: integer
+                out_sku_id:
+                  description: out_sku_id、sku_id 二选一
+                  type: string
+                need_edit_sku:
+                  description: 默认0:获取线上数据, 1:获取草稿数据
+                  format: int32
+                  type: integer
+                need_real_stock:
+                  description: 默认0:获取草稿库存, 1:获取线上真实库存
+                  format: int32
+                  type: integer
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuGetRsp'
+          description: successful operation
+      summary: 获取商品
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/sku/get_list:
+    post:
+      description: 批量获取SKU信息
+      operationId: sku_get_list
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_13'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 商品状态
+                  format: int64
+                  type: integer
+                need_edit_sku:
+                  description: 默认0:获取线上数据, 1:获取草稿数据
+                  format: int32
+                  type: integer
+                need_real_stock:
+                  description: 默认0:获取草稿库存, 1:获取线上真实库存
+                  format: int32
+                  type: integer
+              required:
+              - product_id
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuGetListRsp'
+          description: successful operation
+      summary: 批量获取SKU信息
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/sku/update:
+    post:
+      description: 更新商品
+      operationId: sku_update
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkuUpdateReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuUpdateRsp'
+          description: successful operation
+      summary: 更新商品
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/sku/update_price:
+    post:
+      description: 更新SKU价格
+      operationId: sku_update_price
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_14'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 小商店内部商品ID，与out_product_id二选一
+                  format: int64
+                  type: integer
+                out_product_id:
+                  description: 商家自定义商品ID，与product_id二选一
+                  type: string
+                sku_id:
+                  description: out_sku_id、sku_id 二选一
+                  format: int64
+                  type: integer
+                out_sku_id:
+                  description: out_sku_id、sku_id二选一
+                  type: string
+                sale_price:
+                  description: 售卖价格,以分为单位
+                  format: int64
+                  type: integer
+                market_price:
+                  description: 市场价格,以分为单位
+                  format: int64
+                  type: integer
+              required:
+              - market_price
+              - sale_price
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkuUpdatePriceRsp'
+          description: successful operation
+      summary: 更新SKU价格
+      tags:
+      - sku
+      x-codegen-request-body-name: body
+  /product/stock/update:
+    post:
+      description: 更新库存
+      operationId: stock_update
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_15'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 小商店内部商品ID，与out_product_id二选一
+                  format: int64
+                  type: integer
+                out_product_id:
+                  description: 商家自定义商品ID，与product_id二选一
+                  type: string
+                sku_id:
+                  description: out_sku_id、sku_id 二选一
+                  format: int64
+                  type: integer
+                out_sku_id:
+                  description: out_sku_id、sku_id二选一
+                  type: string
+                type:
+                  description: 1:全量更新 2:增量更新
+                  format: int32
+                  type: integer
+                stock_num:
+                  description: 全量更新时，stock_num必须大于0；增量更新时正数增加库存，负数减库存
+                  format: int64
+                  type: integer
+              required:
+              - stock_num
+              - type
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockUpdateRsp'
+          description: successful operation
+      summary: 更新库存
+      tags:
+      - stock
+      x-codegen-request-body-name: body
+  /product/stock/get:
+    post:
+      description: 获取库存
+      operationId: stock_get
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_16'
+        content:
+          application/json:
+            schema:
+              properties:
+                product_id:
+                  description: 小商店内部商品ID，与out_product_id二选一
+                  format: int64
+                  type: integer
+                out_product_id:
+                  description: 商家自定义商品ID，与product_id二选一
+                  type: string
+                sku_id:
+                  description: out_sku_id、sku_id 二选一
+                  format: int64
+                  type: integer
+                out_sku_id:
+                  description: out_sku_id、sku_id二选一
+                  type: string
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockGetRsp'
+          description: successful operation
+      summary: 获取库存
+      tags:
+      - stock
+      x-codegen-request-body-name: body
+  /product/order/get_list:
+    post:
+      description: 获取订单列表
+      operationId: order_get_list
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_17'
+        content:
+          application/json:
+            schema:
+              properties:
+                start_create_time:
+                  description: 订单创建时间的搜索开始时间
+                  type: string
+                end_create_time:
+                  description: 订单创建时间的搜索结束时间
+                  type: string
+                start_update_time:
+                  description: 订单更新时间的搜索开始时间
+                  type: string
+                end_update_time:
+                  description: 订单更新时间的搜索结束时间
+                  type: string
+                status:
+                  description: 订单状态
+                  format: int32
+                  type: integer
+                page:
+                  description: 第几页（最小填1）
+                  format: int32
+                  type: integer
+                page_size:
+                  description: 每页数量(不超过10,000)
+                  format: int32
+                  type: integer
+              required:
+              - page
+              - page_size
+              - status
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderGetListRsp'
+          description: successful operation
+      summary: 获取订单列表
+      tags:
+      - order
+      x-codegen-request-body-name: body
+  /product/order/get:
+    post:
+      description: 获取订单详情
+      operationId: order_get
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_18'
+        content:
+          application/json:
+            schema:
+              properties:
+                order_id:
+                  description: 订单ID，可从获取订单列表中获得
+                  format: int64
+                  type: integer
+              required:
+              - order_id
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderGetRsp'
+          description: successful operation
+      summary: 获取订单详情
+      tags:
+      - order
+      x-codegen-request-body-name: body
+  /product/order/search:
+    post:
+      description: 搜索订单
+      operationId: order_search
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_19'
+        content:
+          application/json:
+            schema:
+              properties:
+                start_pay_time:
+                  description: 订单支付时间的搜索开始时间
+                  type: string
+                end_pay_time:
+                  description: 订单支付时间的搜索结束时间
+                  type: string
+                title:
+                  description: 商品标题关键词
+                  type: string
+                sku_code:
+                  description: 商品编码
+                  type: string
+                user_name:
+                  description: 收件人
+                  type: string
+                tel_number:
+                  description: 收件人电话
+                  type: string
+                on_aftersale_order_exist:
+                  description: 不填该参数:全部订单 0:没有正在售后的订单, 1:正在售后单数量大于等于1的订单
+                  format: int32
+                  type: integer
+                status:
+                  description: 订单状态
+                  format: int32
+                  type: integer
+                page:
+                  description: 第几页（最小填1）
+                  format: int32
+                  type: integer
+                page_size:
+                  description: 每页数量(不超过10,000)
+                  format: int32
+                  type: integer
+              required:
+              - page
+              - page_size
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderSearchRsp'
+          description: successful operation
+      summary: 搜索订单
+      tags:
+      - order
+      x-codegen-request-body-name: body
+  /product/delivery/get_company_list:
+    post:
+      description: 获取快递公司列表
+      operationId: delivery_get_company_list
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryGetCompanyListRsp'
+          description: successful operation
+      summary: 获取快递公司列表
+      tags:
+      - delivery
+  /product/delivery/send:
+    post:
+      description: 订单发货
+      operationId: delivery_send
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_20'
+        content:
+          application/json:
+            schema:
+              properties:
+                order_id:
+                  description: 订单id
+                  type: string
+                delivery_list:
+                  items:
+                    $ref: '#/components/schemas/_product_delivery_send_delivery_list'
+                  type: array
+              required:
+              - delivery_list
+              - order_id
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverySendRsp'
+          description: successful operation
+      summary: 订单发货
+      tags:
+      - delivery
+      x-codegen-request-body-name: body
+  /product/coupon/create:
+    post:
+      description: 创建优惠券
+      operationId: coupon_create
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_21'
+        content:
+          application/json:
+            schema:
+              properties:
+                type:
+                  description: 优惠券类型
+                  format: int32
+                  type: integer
+                coupon_info:
+                  $ref: '#/components/schemas/CouponInfo'
+              required:
+              - coupon_info
+              - type
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponGetListRsp'
+          description: successful operation
+      summary: 创建优惠券
+      tags:
+      - coupon
+      x-codegen-request-body-name: body
+  /product/coupon/get_list:
+    post:
+      description: 获取优惠券列表
+      operationId: coupon_get_list
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_22'
+        content:
+          application/json:
+            schema:
+              properties:
+                start_create_time:
+                  description: 优惠券创建时间的搜索开始时间
+                  type: string
+                end_create_time:
+                  description: 优惠券创建时间的搜索结束时间
+                  type: string
+                status:
+                  description: 优惠券状态
+                  format: int32
+                  type: integer
+                page:
+                  description: 第几页（最小填1）
+                  format: int32
+                  type: integer
+                page_size:
+                  description: 每页数量(不超过10,000)
+                  format: int32
+                  type: integer
+              required:
+              - end_create_time
+              - page
+              - page_size
+              - start_create_time
+              - status
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponGetListRsp'
+          description: successful operation
+      summary: 获取优惠券列表
+      tags:
+      - coupon
+      x-codegen-request-body-name: body
+  /product/coupon/push:
+    post:
+      description: 发放优惠券
+      operationId: coupon_push
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_23'
+        content:
+          application/json:
+            schema:
+              properties:
+                openid:
+                  description: 用户openid
+                  type: string
+                coupon_id:
+                  description: 优惠券ID，可从获取优惠券中获得
+                  format: int64
+                  type: integer
+              required:
+              - coupon_id
+              - openid
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponPushRsp'
+          description: successful operation
+      summary: 发放优惠券
+      tags:
+      - coupon
+      x-codegen-request-body-name: body
+  /product/store/get_info:
+    post:
+      description: 获取店铺基本信息
+      operationId: store_get_info
+      parameters:
+      - description: 访问权限token
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreGetInfoRsp'
+          description: successful operation
+      summary: 获取店铺基本信息
+      tags:
+      - store
+components:
+  requestBodies:
+    inline_object_1:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_1'
+      required: true
+    inline_object_9:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_9'
+      required: true
+    inline_object_10:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_10'
+      required: true
+    inline_object_21:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_21'
+      required: true
+    inline_object_8:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_8'
+      required: true
+    inline_object_20:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_20'
+      required: true
+    inline_object_7:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_7'
+      required: true
+    inline_object_12:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_12'
+      required: true
+    inline_object_23:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_23'
+      required: true
+    inline_object_6:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_6'
+      required: true
+    inline_object_11:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_11'
+      required: true
+    inline_object_22:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_22'
+      required: true
+    inline_object_5:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_5'
+      required: true
+    inline_object_14:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_14'
+      required: true
+    inline_object_4:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_4'
+      required: true
+    inline_object_13:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_13'
+      required: true
+    inline_object_3:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_3'
+      required: true
+    inline_object_16:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_16'
+      required: true
+    inline_object_2:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_2'
+      required: true
+    inline_object_15:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_15'
+      required: true
+    inline_object_18:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_18'
+      required: true
+    inline_object_17:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_17'
+      required: true
+    inline_object_19:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_19'
+      required: true
+    inline_object:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+      required: true
+  schemas:
+    BusiLicense:
+      description: 营业执照/登记证书信息
+      properties:
+        license_type:
+          description: 营业执照类型 1-三证合一 2-普通营业执照
+          format: int64
+          type: integer
+        pic_file:
+          $ref: '#/components/schemas/PicFile'
+        registration_num:
+          description: 请填写营业执照上的注册号/统一社会信用代码，须为15位数字或18位数字大写字母。示例值;123456789012345678
+            特殊规则;长度最小15个字节
+          type: string
+        merchant_name:
+          description: 1、请填写营业执照/登记证书的商家名称，2~110个字符，支持括号 2、个体工商户/党政、机关及事业单位，不能以“公司”结尾。
+            3、个体工商户，若营业执照上商户名称为空或为“无”，请填写"个体户+经营者姓名"，如“个体户张三” 。示例值-腾讯科技有限公司
+          type: string
+        legal_representative:
+          description: 请填写证件的经营者/法定代表人姓名。示例值-张三
+          type: string
+        registered_addrs:
+          description: 注册地址
+          type: string
+        start_date:
+          description: 注册日期，格式2014-01-01
+          type: string
+        end_date:
+          description: 结束有效期，格式;2014-01-01;1、若证件有效期为长期，请填写;长期。2、结束时间需大于开始时间。3、有效期必须大于60天，即结束时间距当前时间需超过60天。
+          type: string
+      required:
+      - end_date
+      - legal_representative
+      - license_type
+      - merchant_name
+      - pic_file
+      - registration_num
+      - start_date
+      title: BusiLicense
+      type: object
+    OrganizationCodeInfo:
+      description: 组织机构代码证信息
+      properties:
+        organization_code:
+          description: 1、请填写组织机构代码证上的组织机构代码。2、可填写9或10位 数字\字母\连字符。示例值;12345679-A
+          type: string
+        start_date:
+          description: 注册日期，格式;2014-01-01
+          type: string
+        end_date:
+          description: 结束有效期，格式;2014-01-01;1、若证件有效期为长期，请填写;长期。2、结束时间需大于开始时间。3、有效期必须大于60天，即结束时间距当前时间需超过60天。
+          type: string
+        pic_file:
+          $ref: '#/components/schemas/PicFile'
+      required:
+      - end_date
+      - organization_code
+      - pic_file
+      - start_date
+      title: OrganizationCodeInfo
+      type: object
+    IdCardInfo:
+      description: 身份证
+      properties:
+        portrait_pic_file:
+          $ref: '#/components/schemas/PicFile'
+        nation_pic_file:
+          $ref: '#/components/schemas/PicFile'
+        id_card_name:
+          description: 请填写经营者/法定代表人对应身份证的姓名，2~30个中文字符、英文字符、符号。
+          type: string
+        id_card_number:
+          description: 请填写经营者/法定代表人对应身份证的号码
+          type: string
+        start_date:
+          description: 注册日期，格式：2014-01-01
+          type: string
+        end_date:
+          description: 结束有效期，格式：2014-01-01;1、若证件有效期为长期，请填写：长期。2、结束时间需大于开始时间。3、有效期必须大于60天，即结束时间距当前时间需超过60天。
+          type: string
+      required:
+      - end_date
+      - id_card_name
+      - id_card_number
+      - nation_pic_file
+      - portrait_pic_file
+      - start_date
+      title: IdCardInfo
+      type: object
+    SuperAdministratorInfo:
+      description: 超级管理员信息 请填写店铺的超级管理员信息。超级管理员需在开户后进行签约，并可接收日常重要管理信息和进行资金操作，请确定其为商户法定代表人或负责人。
+      properties:
+        type:
+          description: 个体工商户/企业/党政、机关及事业单位/其他组织，可选择：65-法人/经营者、66- 负责人。（负责人：经商户授权办理微信支付业务的人员，授权范围包括但不限于签约，入驻过程需完成账户验证）。示例值：65
+          type: string
+        name:
+          description: 1、若管理员类型为“法人”，则该姓名需与法人身份证姓名一致。2、若管理员类型为“经办人”，则可填写实际经办人的姓名
+          type: string
+        id_card_number:
+          description: 1、若管理员类型为法人，则该身份证号码需与法人身份证号码一致。若管理员类型为经办人，则可填写实际经办人的身份证号码。2、可传身份证、来往内地通行证、来往大陆通行证、护照等证件号码。3、超级管理员签约时，校验微信号绑定的银行卡实名信息，是否与该证件号码一致。
+          format: int64
+          type: integer
+        phone:
+          description: 请填写管理员的手机号，11位数字， 用于接收微信支付的重要管理信息及日常操作验证码 。
+          format: int64
+          type: integer
+        mail:
+          description: 1、用于接收微信支付的开户邮件及日常业务通知。2、需要带@，遵循邮箱格式校验 。
+          type: string
+      required:
+      - id_card_number
+      - mail
+      - name
+      - phone
+      - type
+      title: SuperAdministratorInfo
+      type: object
+    PicFile:
+      description: ""
+      properties:
+        media_id:
+          description: media_id，此处通过上传图片接口获得传入内容
+          type: string
+        pay_media_id:
+          description: media_id，此处通过上传图片接口获得传入内容
+          type: string
+      required:
+      - media_id
+      - pay_media_id
+      title: PicFile
+      type: object
+    NameInfo:
+      description: ""
+      properties:
+        nickname:
+          description: 1）小程序名称可以由中文、数字、英文、空格及部分特殊符号(“空格”、“-”、“+”、“&”、“.”)组成。长度在4-30个字符之间，一个中文字等于2个字符。2）公众号、小程序在微信公众平台上的名称是唯一的，且属于同一主体下，可以重名。3）不得与不同主体的公众号名称重名。
+          type: string
+        abbr:
+          description: 1）小程序简称可以从小程序名称中按顺序截取字符创建。长度在4-10个字符之间，一个中文字等于2个字符。2）小程序简称在微信公众平台是不唯一的，可以重名。但对于仿冒、侵权等恶意情况，平台仍会做出相关处罚。开发者也可通过侵权投诉维护自己的正当权益。3）小程序简称设置后，将在客户端任务栏向用户展示。开发者可以凭借此功能，更好地实现产品品牌价值和展示。目前暂不支持名称的其他功能。
+          type: string
+        introduction:
+          description: 请确认介绍内容不含国家相关法律法规禁止内容,介绍字数为4-120个字符，一个中文占2个字符。一个月内可申请5次修改。请提供可支持命名的材料
+          type: string
+        naming_other_stuff:
+          description: 补充材料，传media id数组，当返回210047时必填
+          items:
+            type: string
+          type: array
+      required:
+      - abbr
+      - introduction
+      - nickname
+      title: NameInfo
+      type: object
+    ReturnInfo:
+      description: ""
+      properties:
+        address_info:
+          $ref: '#/components/schemas/AddressInfo'
+        mail:
+          description: 邮箱
+          type: string
+        company_address:
+          $ref: '#/components/schemas/AddressInfo'
+      required:
+      - address_info
+      - company_address
+      - mail
+      title: ReturnInfo
+      type: object
+    CouponInfo:
+      description: ""
+      properties:
+        name:
+          description: 优惠券名称
+          type: string
+        discount_info:
+          $ref: '#/components/schemas/CouponInfo_discount_info'
+        ext_info:
+          $ref: '#/components/schemas/CouponInfo_ext_info'
+        promote_info:
+          $ref: '#/components/schemas/CouponInfo_promote_info'
+        receive_info:
+          $ref: '#/components/schemas/CouponInfo_receive_info'
+        valid_info:
+          $ref: '#/components/schemas/CouponInfo_valid_info'
+      required:
+      - discount_info
+      - ext_info
+      - name
+      - promote_info
+      - receive_info
+      - valid_info
+      title: CouponInfo
+      type: object
+    CheckAuditStatusRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          acct_verify_status: 5
+          audit_reject_reasons: audit_reject_reasons
+          registered_appid: registered_appid
+          legal_validation_url: legal_validation_url
+          pay_sign_status: 2
+          merchant_info_status: 1
+          pay_audit_detail:
+            reject_reason: reject_reason
+            param_name: param_name
+          basic_info_status: 5
+          register_status: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/CheckAuditStatusRsp_data'
+      title: CheckAuditStatusRsp
+      type: object
+    RegisterShopRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;1005-实名认证失败，请检查身份证、微信号和姓名是否匹配
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: RegisterShopRsp
+      type: object
+    SubmitMerchantinfo:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;40-参数错误,请使用正确的参数重新调用;429-请降低调用频率;1005-实名认证失败，请检查身份证、微信号和姓名是否匹配
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: SubmitMerchantinfo
+      type: object
+    SubmitBasicinfo:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;-15-缺少类目资质
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: SubmitBasicinfo
+      type: object
+    CategoryGetRsp:
+      description: ""
+      example:
+        errcode: 0
+        cat_list:
+        - cat_id: 6
+          name: name
+          f_cat_id: 1
+        - cat_id: 6
+          name: name
+          f_cat_id: 1
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        cat_list:
+          items:
+            $ref: '#/components/schemas/CategoryRsp'
+          type: array
+      title: CategoryGetRsp
+      type: object
+    CategoryRsp:
+      description: 类目详情
+      example:
+        cat_id: 6
+        name: name
+        f_cat_id: 1
+      properties:
+        cat_id:
+          description: 类目ID
+          format: int64
+          type: integer
+        f_cat_id:
+          description: 类目父ID
+          format: int64
+          type: integer
+        name:
+          description: 类目名称
+          type: string
+      title: CategoryRsp
+      type: object
+    BrandGetRsp:
+      description: ""
+      example:
+        errcode: 0
+        brands:
+        - brand_info:
+            brand_name: brand_name
+            brand_id: 5
+          second_cat_id: 1
+          third_cat_id: 5
+          first_cat_id: 6
+        - brand_info:
+            brand_name: brand_name
+            brand_id: 5
+          second_cat_id: 1
+          third_cat_id: 5
+          first_cat_id: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        brands:
+          items:
+            $ref: '#/components/schemas/BrandRsp'
+          type: array
+      title: BrandGetRsp
+      type: object
+    BrandRsp:
+      description: 品牌详情
+      example:
+        brand_info:
+          brand_name: brand_name
+          brand_id: 5
+        second_cat_id: 1
+        third_cat_id: 5
+        first_cat_id: 6
+      properties:
+        first_cat_id:
+          description: 第一级类目
+          format: int64
+          type: integer
+        second_cat_id:
+          description: 第二级类目
+          format: int64
+          type: integer
+        third_cat_id:
+          description: 第三级类目
+          format: int64
+          type: integer
+        brand_info:
+          $ref: '#/components/schemas/BrandRsp_brand_info'
+      title: BrandRsp
+      type: object
+    DeliveryGetFreightTemplateRsp:
+      description: ""
+      example:
+        errcode: 0
+        template_list:
+        - name: name
+          template_id: 6
+          valuation_type: 1
+        - name: name
+          template_id: 6
+          valuation_type: 1
+        errmsg: errmsg
+      properties:
+        errcode:
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        template_list:
+          items:
+            $ref: '#/components/schemas/FreightTemplateRsp'
+          type: array
+      title: DeliveryGetFreightTemplateRsp
+      type: object
+    FreightTemplateRsp:
+      description: 运费模版
+      example:
+        name: name
+        template_id: 6
+        valuation_type: 1
+      properties:
+        template_id:
+          description: 模板ID
+          format: int64
+          type: integer
+        valuation_type:
+          description: 计费类型,1-按件,2-按重量
+          format: int16
+          type: integer
+        name:
+          description: 模板名称
+          type: string
+      title: FreightTemplateRsp
+      type: object
+    StoreGetShopcatRsp:
+      description: ""
+      example:
+        errcode: 0
+        shopcat_list:
+        - cat_level: 5
+          shopcat_name: shopcat_name
+          f_shopcat_id: 1
+          shopcat_id: 6
+        - cat_level: 5
+          shopcat_name: shopcat_name
+          f_shopcat_id: 1
+          shopcat_id: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常为-1;token太长为-2
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        shopcat_list:
+          items:
+            $ref: '#/components/schemas/ShopcatRsp'
+          type: array
+      title: StoreGetShopcatRsp
+      type: object
+    ShopcatRsp:
+      description: 运费模版
+      example:
+        cat_level: 5
+        shopcat_name: shopcat_name
+        f_shopcat_id: 1
+        shopcat_id: 6
+      properties:
+        shopcat_id:
+          description: 分类ID
+          format: int64
+          type: integer
+        f_shopcat_id:
+          description: 父分类ID
+          format: int64
+          type: integer
+        cat_level:
+          description: 分类层级
+          format: int64
+          type: integer
+        shopcat_name:
+          description: 分类名称
+          type: string
+      title: ShopcatRsp
+      type: object
+    SpuAddReq:
+      description: ""
+      example:
+        sub_title: sub_title
+        cats:
+        - level: 1
+          cat_id: 6
+        - level: 1
+          cat_id: 6
+        skus:
+        - out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+        - out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+        desc_info:
+          imgs:
+          - imgs
+          - imgs
+        head_img:
+        - head_img
+        - head_img
+        out_product_id: out_product_id
+        model: model
+        title: title
+        express_info:
+          template_id: 5
+        brand_id: 0
+        attrs:
+        - attr_key: attr_key
+          attr_value: attr_value
+        - attr_key: attr_key
+          attr_value: attr_value
+      properties:
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        title:
+          description: 标题
+          type: string
+        sub_title:
+          description: 副标题
+          type: string
+        head_img:
+          description: 主图,多张,列表
+          items:
+            type: string
+          type: array
+        desc_info:
+          $ref: '#/components/schemas/SpuAddReq_desc_info'
+        brand_id:
+          description: 品牌ID，商家需要申请品牌并通过获取品牌接口brand/get获取，如果是无品牌请填2100000000
+          format: int64
+          type: integer
+        cats:
+          description: 类目
+          items:
+            $ref: '#/components/schemas/Cats'
+          type: array
+        attrs:
+          description: 属性
+          items:
+            $ref: '#/components/schemas/Attrs'
+          type: array
+        model:
+          description: 商品型号
+          type: string
+        express_info:
+          $ref: '#/components/schemas/SpuAddReq_express_info'
+        skus:
+          description: 该 skus 列表非必填，可另行通过 BatchAddSKU 添加 SKU
+          items:
+            $ref: '#/components/schemas/Sku'
+          type: array
+      required:
+      - attrs
+      - brand_id
+      - cats
+      - desc_info
+      - express_info
+      - head_img
+      - out_product_id
+      - title
+      title: SpuAddReq
+      type: object
+    Cats:
+      description: 类目
+      example:
+        level: 1
+        cat_id: 6
+      properties:
+        cat_id:
+          description: 类目ID，如果brand_id=2100000000，需要先通过获取类目接口category/get拿到可用的cat_id；如果brand_id!=2100000000，则这里的cat_id需要与获取品牌接口brand/get中的1,2,3级类目一一对应
+          format: int64
+          type: integer
+        level:
+          description: 类目层级
+          format: int32
+          type: integer
+      required:
+      - cat_id
+      - level
+      title: Cats
+      type: object
+    Attrs:
+      description: 属性
+      example:
+        attr_key: attr_key
+        attr_value: attr_value
+      properties:
+        attr_key:
+          description: 属性键key（属性自定义用）
+          type: string
+        attr_value:
+          description: 属性值（属性自定义用）
+          type: string
+      required:
+      - attr_key
+      - attr_value
+      title: Attrs
+      type: object
+    Sku:
+      description: Sku
+      example:
+        out_sku_id: out_sku_id
+        product_id: 5
+        stock_num: 3
+        market_price: 9
+        out_product_id: out_product_id
+        sku_id: 2
+        thumb_img: thumb_img
+        sale_price: 7
+        sku_code: sku_code
+        barcode: barcode
+        sku_attrs:
+        - attr_key: attr_key
+          attr_value: attr_value
+        - attr_key: attr_key
+          attr_value: attr_value
+        status: 2
+      properties:
+        product_id:
+          description: 小商店内部商品ID
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID
+          type: string
+        out_sku_id:
+          description: 商家自定义skuID
+          type: string
+        sku_id:
+          description: sku_id
+          format: int64
+          type: integer
+        thumb_img:
+          description: sku小图
+          type: string
+        sale_price:
+          description: 售卖价格,以分为单位
+          format: int64
+          type: integer
+        market_price:
+          description: 市场价格,以分为单位
+          format: int64
+          type: integer
+        stock_num:
+          description: 库存
+          format: int64
+          type: integer
+        sku_code:
+          description: 商品编码
+          type: string
+        barcode:
+          description: 条形码
+          type: string
+        status:
+          description: sku状态
+          format: int32
+          type: integer
+        sku_attrs:
+          description: sku属性值
+          items:
+            $ref: '#/components/schemas/Attrs'
+          type: array
+      required:
+      - market_price
+      - out_product_id
+      - out_sku_id
+      - product_id
+      - sale_price
+      - sku_attrs
+      - sku_id
+      - stock_num
+      - thumb_img
+      title: Sku
+      type: object
+    SpuAddRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          create_time: create_time
+          product_id: 6
+          out_product_id: out_product_id
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SpuAddRsp_data'
+      title: SpuAddRsp
+      type: object
+    SpuDelRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: SpuDelRsp
+      type: object
+    SpuGetRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          spu:
+            sub_title: sub_title
+            skus:
+            - sku_id: 9
+            - sku_id: 9
+            edit_status: 5
+            desc_info:
+              imgs:
+              - imgs
+              - imgs
+            head_img:
+            - head_img
+            - head_img
+            title: title
+            brand_id: 1
+            attrs:
+            - attr_key: attr_key
+              attr_value: attr_value
+            - attr_key: attr_key
+              attr_value: attr_value
+            cats:
+            - level: 1
+              cat_id: 6
+            - level: 1
+              cat_id: 6
+            min_price: 2
+            shopcat:
+            - shopcat_id: 7
+            - shopcat_id: 7
+            product_id: 6
+            out_product_id: out_product_id
+            model: model
+            status: 5
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SpuGetRsp_data'
+      title: SpuGetRsp
+      type: object
+    Spu:
+      description: ""
+      example:
+        sub_title: sub_title
+        skus:
+        - sku_id: 9
+        - sku_id: 9
+        edit_status: 5
+        desc_info:
+          imgs:
+          - imgs
+          - imgs
+        head_img:
+        - head_img
+        - head_img
+        title: title
+        brand_id: 1
+        attrs:
+        - attr_key: attr_key
+          attr_value: attr_value
+        - attr_key: attr_key
+          attr_value: attr_value
+        cats:
+        - level: 1
+          cat_id: 6
+        - level: 1
+          cat_id: 6
+        min_price: 2
+        shopcat:
+        - shopcat_id: 7
+        - shopcat_id: 7
+        product_id: 6
+        out_product_id: out_product_id
+        model: model
+        status: 5
+      properties:
+        title:
+          description: 标题
+          type: string
+        sub_title:
+          description: 副标题
+          type: string
+        head_img:
+          description: 主图,多张,列表
+          items:
+            type: string
+          type: array
+        desc_info:
+          $ref: '#/components/schemas/Spu_desc_info'
+        out_product_id:
+          description: 商家自定义商品ID
+          type: string
+        product_id:
+          description: 小商店内部商品ID
+          format: int64
+          type: integer
+        brand_id:
+          description: 商家需要申请品牌
+          format: int64
+          type: integer
+        status:
+          description: 商品线上状态;初始值-0;上架-5;回收站-6;逻辑删除-9;自主下架-11;售磬下架-12;违规下架/风控系统下架-13
+          format: int64
+          type: integer
+        edit_status:
+          description: 商品草稿状态;初始值-0;编辑中-1;审核中-2;审核失败-3;审核成功-4
+          format: int64
+          type: integer
+        min_price:
+          description: 商品SKU最小价格（单位：分）
+          format: int64
+          type: integer
+        cats:
+          description: 类目
+          items:
+            $ref: '#/components/schemas/Cats'
+          type: array
+        attrs:
+          description: 属性
+          items:
+            $ref: '#/components/schemas/Attrs'
+          type: array
+        model:
+          description: 商品型号
+          type: string
+        shopcat:
+          description: 该 skus 列表非必填，可另行通过 BatchAddSKU 添加 SKU
+          items:
+            $ref: '#/components/schemas/Spu_shopcat'
+          type: array
+        skus:
+          description: 该 skus 列表非必填，可另行通过 BatchAddSKU 添加 SKU
+          items:
+            $ref: '#/components/schemas/Spu_skus'
+          type: array
+      title: Spu
+      type: object
+    SpuGetListRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+        spus:
+        - sub_title: sub_title
+          skus:
+          - sku_id: 9
+          - sku_id: 9
+          edit_status: 5
+          desc_info:
+            imgs:
+            - imgs
+            - imgs
+          head_img:
+          - head_img
+          - head_img
+          title: title
+          brand_id: 1
+          attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          cats:
+          - level: 1
+            cat_id: 6
+          - level: 1
+            cat_id: 6
+          min_price: 2
+          shopcat:
+          - shopcat_id: 7
+          - shopcat_id: 7
+          product_id: 6
+          out_product_id: out_product_id
+          model: model
+          status: 5
+        - sub_title: sub_title
+          skus:
+          - sku_id: 9
+          - sku_id: 9
+          edit_status: 5
+          desc_info:
+            imgs:
+            - imgs
+            - imgs
+          head_img:
+          - head_img
+          - head_img
+          title: title
+          brand_id: 1
+          attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          cats:
+          - level: 1
+            cat_id: 6
+          - level: 1
+            cat_id: 6
+          min_price: 2
+          shopcat:
+          - shopcat_id: 7
+          - shopcat_id: 7
+          product_id: 6
+          out_product_id: out_product_id
+          model: model
+          status: 5
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        spus:
+          items:
+            $ref: '#/components/schemas/Spu'
+          type: array
+      title: SpuGetListRsp
+      type: object
+    SpuSearchRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+        spus:
+        - sub_title: sub_title
+          skus:
+          - sku_id: 9
+          - sku_id: 9
+          edit_status: 5
+          desc_info:
+            imgs:
+            - imgs
+            - imgs
+          head_img:
+          - head_img
+          - head_img
+          title: title
+          brand_id: 1
+          attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          cats:
+          - level: 1
+            cat_id: 6
+          - level: 1
+            cat_id: 6
+          min_price: 2
+          shopcat:
+          - shopcat_id: 7
+          - shopcat_id: 7
+          product_id: 6
+          out_product_id: out_product_id
+          model: model
+          status: 5
+        - sub_title: sub_title
+          skus:
+          - sku_id: 9
+          - sku_id: 9
+          edit_status: 5
+          desc_info:
+            imgs:
+            - imgs
+            - imgs
+          head_img:
+          - head_img
+          - head_img
+          title: title
+          brand_id: 1
+          attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          cats:
+          - level: 1
+            cat_id: 6
+          - level: 1
+            cat_id: 6
+          min_price: 2
+          shopcat:
+          - shopcat_id: 7
+          - shopcat_id: 7
+          product_id: 6
+          out_product_id: out_product_id
+          model: model
+          status: 5
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        spus:
+          items:
+            $ref: '#/components/schemas/Spu'
+          type: array
+      title: SpuSearchRsp
+      type: object
+    SpuUpdateReq:
+      description: ""
+      example:
+        sub_title: sub_title
+        cats:
+        - level: 1
+          cat_id: 6
+        - level: 1
+          cat_id: 6
+        desc_info:
+          imgs:
+          - imgs
+          - imgs
+        product_id: 0
+        head_img:
+        - head_img
+        - head_img
+        out_product_id: out_product_id
+        model: model
+        title: title
+        express_info:
+          template_id: 1
+        brand_id: 6
+        attrs:
+        - attr_key: attr_key
+          attr_value: attr_value
+        - attr_key: attr_key
+          attr_value: attr_value
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        title:
+          description: 标题
+          type: string
+        sub_title:
+          description: 副标题
+          type: string
+        head_img:
+          description: 主图,多张,列表
+          items:
+            type: string
+          type: array
+        desc_info:
+          $ref: '#/components/schemas/SpuAddReq_desc_info'
+        brand_id:
+          description: 品牌ID，商家需要申请品牌并通过获取品牌接口brand/get获取，如果是无品牌请填2100000000
+          format: int64
+          type: integer
+        cats:
+          description: 类目
+          items:
+            $ref: '#/components/schemas/Cats'
+          type: array
+        attrs:
+          description: 属性
+          items:
+            $ref: '#/components/schemas/Attrs'
+          type: array
+        model:
+          description: 商品型号
+          type: string
+        express_info:
+          $ref: '#/components/schemas/SpuUpdateReq_express_info'
+      required:
+      - attrs
+      - brand_id
+      - cats
+      - desc_info
+      - express_info
+      - head_img
+      - title
+      title: SpuUpdateReq
+      type: object
+    SpuUpdateRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          update_time: update_time
+          product_id: 6
+          out_product_id: out_product_id
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SpuUpdateRsp_data'
+      title: SpuUpdateRsp
+      type: object
+    SpuListingRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: SpuListingRsp
+      type: object
+    SpuDelistingRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: SpuDelistingRsp
+      type: object
+    SkuAddReq:
+      $ref: '#/components/schemas/Sku'
+    SkuAddRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          create_time: create_time
+          sku_id: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;SkU不存在-9401006;SkU已经存在-9401005;SkU不允许编辑-9401025
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SkuAddRsp_data'
+      title: SkuAddRsp
+      type: object
+    SkuBatchAddReq:
+      description: ""
+      example:
+        skus:
+        - out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+        - out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+      properties:
+        skus:
+          items:
+            $ref: '#/components/schemas/Sku'
+          type: array
+      title: SkuBatchAddReq
+      type: object
+    SkuBatchAddRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          create_time: create_time
+          sku_id: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;SkU不存在-9401006;SkU已经存在-9401005;SkU不允许编辑-9401025
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SkuAddRsp_data'
+      title: SkuBatchAddRsp
+      type: object
+    SkuDelRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;SkU不存在-9401006;SkU已经存在-9401005;SkU不允许编辑-9401025
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: SkuDelRsp
+      type: object
+    SkuGetRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/Sku'
+      title: SkuGetRsp
+      type: object
+    SkuGetListRsp:
+      description: ""
+      example:
+        errcode: 0
+        skus:
+        - out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+        - out_sku_id: out_sku_id
+          product_id: 5
+          stock_num: 3
+          market_price: 9
+          out_product_id: out_product_id
+          sku_id: 2
+          thumb_img: thumb_img
+          sale_price: 7
+          sku_code: sku_code
+          barcode: barcode
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          status: 2
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        skus:
+          items:
+            $ref: '#/components/schemas/Sku'
+          type: array
+      title: SkuGetListRsp
+      type: object
+    SkuUpdateReq:
+      description: ""
+      example:
+        out_sku_id: 1
+        product_id: 0
+        stock_num: 2
+        market_price: 5
+        out_product_id: out_product_id
+        sku_id: 6
+        thumb_img: thumb_img
+        sale_price: 5
+        sku_code: sku_code
+        barcode: barcode
+        sku_attrs:
+        - attr_key: attr_key
+          attr_value: attr_value
+        - attr_key: attr_key
+          attr_value: attr_value
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        sku_id:
+          description: out_sku_id、sku_id 二选一
+          format: int64
+          type: integer
+        out_sku_id:
+          description: out_sku_id、sku_id二选一
+          format: int64
+          type: integer
+        thumb_img:
+          description: sku小图
+          type: string
+        sale_price:
+          description: 售卖价格,以分为单位
+          format: int64
+          type: integer
+        market_price:
+          description: 市场价格,以分为单位
+          format: int64
+          type: integer
+        stock_num:
+          description: 库存
+          format: int64
+          type: integer
+        sku_code:
+          description: 商品编码
+          type: string
+        barcode:
+          description: 条形码
+          type: string
+        sku_attrs:
+          items:
+            $ref: '#/components/schemas/Attrs'
+          type: array
+      required:
+      - sale_price
+      - sku_attrs
+      - stock_num
+      - thumb_img
+      title: SkuUpdateReq
+      type: object
+    SkuUpdateRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          update_time: update_time
+          sku_id: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SkuUpdateRsp_data'
+      title: SkuUpdateRsp
+      type: object
+    SkuUpdatePriceRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          update_time: update_time
+          sku_id: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;SPU不存在-9401002;SPU已经存在-9401001;SPU不允许编辑-9401023
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/SkuUpdateRsp_data'
+      title: SkuUpdatePriceRsp
+      type: object
+    StockUpdateRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          update_time: update_time
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;product_id不存在-100002;sku不存在-100004
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/StockUpdateRsp_data'
+      title: StockUpdateRsp
+      type: object
+    StockGetRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          stock_num: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;product_id不存在-100002;sku不存在-100004
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/StockGetRsp_data'
+      title: StockGetRsp
+      type: object
+    OrderGetListRsp:
+      description: ""
+      example:
+        errcode: 0
+        total_num: 6
+        errmsg: errmsg
+        orders:
+        - update_time: update_time
+          after_sale_info:
+            on_aftersale_order_cnt: 4
+            aftersale_order_list:
+            - aftersale_order_id: 7
+            - aftersale_order_id: 7
+          openid: openid
+          order_detail:
+            price_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            pay_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            product_infos:
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+          ext_info:
+            customer_notes: customer_notes
+            merchant_notes: merchant_notes
+          order_id: 1
+          status: 5
+          craete_time: craete_time
+        - update_time: update_time
+          after_sale_info:
+            on_aftersale_order_cnt: 4
+            aftersale_order_list:
+            - aftersale_order_id: 7
+            - aftersale_order_id: 7
+          openid: openid
+          order_detail:
+            price_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            pay_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            product_infos:
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+          ext_info:
+            customer_notes: customer_notes
+            merchant_notes: merchant_notes
+          order_id: 1
+          status: 5
+          craete_time: craete_time
+      properties:
+        errcode:
+          description: 系统异常--1;product_id不存在-100002;sku不存在-100004
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        total_num:
+          format: int64
+          type: integer
+        orders:
+          items:
+            $ref: '#/components/schemas/Order'
+          type: array
+      title: OrderGetListRsp
+      type: object
+    Order:
+      description: ""
+      example:
+        update_time: update_time
+        after_sale_info:
+          on_aftersale_order_cnt: 4
+          aftersale_order_list:
+          - aftersale_order_id: 7
+          - aftersale_order_id: 7
+        openid: openid
+        order_detail:
+          price_info:
+            transaction_id: transaction_id
+            prepay_time: prepay_time
+            pay_method: pay_method
+            prepay_id: prepay_id
+            pay_time: pay_time
+          pay_info:
+            transaction_id: transaction_id
+            prepay_time: prepay_time
+            pay_method: pay_method
+            prepay_id: prepay_id
+            pay_time: pay_time
+          product_infos:
+          - finish_aftersale_sku_cnt: 3
+            product_id: 5
+            sku_cnt: 7
+            slae_price: 2
+            sku_id: 2
+            title: title
+            on_aftersale_sku_cnt: 9
+            thumb_img: thumb_img
+            sku_attrs:
+            - attr_key: attr_key
+              attr_value: attr_value
+            - attr_key: attr_key
+              attr_value: attr_value
+          - finish_aftersale_sku_cnt: 3
+            product_id: 5
+            sku_cnt: 7
+            slae_price: 2
+            sku_id: 2
+            title: title
+            on_aftersale_sku_cnt: 9
+            thumb_img: thumb_img
+            sku_attrs:
+            - attr_key: attr_key
+              attr_value: attr_value
+            - attr_key: attr_key
+              attr_value: attr_value
+        ext_info:
+          customer_notes: customer_notes
+          merchant_notes: merchant_notes
+        order_id: 1
+        status: 5
+        craete_time: craete_time
+      properties:
+        order_id:
+          description: 订单ID
+          format: int64
+          type: integer
+        status:
+          description: 订单状态
+          format: int32
+          type: integer
+        craete_time:
+          description: 创建时间
+          type: string
+        update_time:
+          description: 更新时间
+          type: string
+        order_detail:
+          $ref: '#/components/schemas/Order_order_detail'
+        after_sale_info:
+          $ref: '#/components/schemas/AfterSaleInfo'
+        openid:
+          description: 用户的openid，用于物流助手接口
+          type: string
+        ext_info:
+          $ref: '#/components/schemas/Order_ext_info'
+      title: Order
+      type: object
+    PproductInfo:
+      description: ""
+      example:
+        finish_aftersale_sku_cnt: 3
+        product_id: 5
+        sku_cnt: 7
+        slae_price: 2
+        sku_id: 2
+        title: title
+        on_aftersale_sku_cnt: 9
+        thumb_img: thumb_img
+        sku_attrs:
+        - attr_key: attr_key
+          attr_value: attr_value
+        - attr_key: attr_key
+          attr_value: attr_value
+      properties:
+        product_id:
+          description: 小商店内部商品ID
+          format: int64
+          type: integer
+        sku_id:
+          description: 小商店内部skuID
+          format: int64
+          type: integer
+        sku_cnt:
+          description: sku数量
+          format: int64
+          type: integer
+        on_aftersale_sku_cnt:
+          description: 正在售后/退款流程中的sku数量
+          format: int64
+          type: integer
+        finish_aftersale_sku_cnt:
+          description: 完成售后/退款的sku数量
+          format: int64
+          type: integer
+        title:
+          description: 标题
+          type: string
+        thumb_img:
+          description: sku小图
+          type: string
+        slae_price:
+          description: 售卖价格,以分为单位
+          format: int64
+          type: integer
+        sku_attrs:
+          items:
+            $ref: '#/components/schemas/Attrs'
+          type: array
+      title: PproductInfo
+      type: object
+    PayInfo:
+      description: ""
+      example:
+        transaction_id: transaction_id
+        prepay_time: prepay_time
+        pay_method: pay_method
+        prepay_id: prepay_id
+        pay_time: pay_time
+      properties:
+        pay_method:
+          description: 支付方式（目前只有"微信支付"）
+          type: string
+        prepay_id:
+          description: 预支付ID
+          type: string
+        transaction_id:
+          description: 支付订单号
+          type: string
+        prepay_time:
+          description: 预付款时间
+          type: string
+        pay_time:
+          description: 付款时间
+          type: string
+      title: PayInfo
+      type: object
+    PriceInfo:
+      description: ""
+      properties:
+        product_price:
+          description: 商品金额（单位：分）
+          format: int64
+          type: integer
+        order_price:
+          description: 订单金额（单位：分）
+          format: int64
+          type: integer
+        freight:
+          description: 运费（单位：分）
+          format: int64
+          type: integer
+        discounted_price:
+          description: 优惠金额（单位：分）
+          format: int64
+          type: integer
+        is_discounted:
+          description: 是否有优惠（false：无优惠/true：有优惠）
+          type: boolean
+      title: PriceInfo
+      type: object
+    DeliveryInfo:
+      description: ""
+      properties:
+        delivery_method:
+          description: 快递方式（目前只有"快递"）
+          type: string
+        delivery_time:
+          description: 发货时间
+          type: string
+        delivery_product_info:
+          $ref: '#/components/schemas/DeliveryInfo_delivery_product_info'
+        address_info:
+          $ref: '#/components/schemas/AddressInfo'
+      title: DeliveryInfo
+      type: object
+    AddressInfo:
+      description: ""
+      properties:
+        user_name:
+          description: 收货人姓名
+          type: string
+        postal_code:
+          description: 邮编
+          format: int32
+          type: integer
+        province_name:
+          description: 国标收货地址第一级地址
+          type: string
+        city_name:
+          description: 国标收货地址第二级地址
+          type: string
+        county_name:
+          description: 国标收货地址第三级地址
+          type: string
+        detail_info:
+          description: 详细收货地址信息
+          type: string
+        national_code:
+          description: 收货地址国家码
+          format: int32
+          type: integer
+        tel_number:
+          description: 收货人手机号码
+          type: string
+      required:
+      - city_name
+      - county_name
+      - province_name
+      - tel_number
+      - user_name
+      title: AddressInfo
+      type: object
+    AfterSaleInfo:
+      description: ""
+      example:
+        on_aftersale_order_cnt: 4
+        aftersale_order_list:
+        - aftersale_order_id: 7
+        - aftersale_order_id: 7
+      properties:
+        on_aftersale_order_cnt:
+          description: 正在售后流程的售后单数
+          format: int64
+          type: integer
+        aftersale_order_list:
+          description: 售后单ID列表
+          items:
+            $ref: '#/components/schemas/AfterSaleInfo_aftersale_order_list'
+          type: array
+      title: AfterSaleInfo
+      type: object
+    OrderGetRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+        order:
+          update_time: update_time
+          after_sale_info:
+            on_aftersale_order_cnt: 4
+            aftersale_order_list:
+            - aftersale_order_id: 7
+            - aftersale_order_id: 7
+          openid: openid
+          order_detail:
+            price_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            pay_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            product_infos:
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+          ext_info:
+            customer_notes: customer_notes
+            merchant_notes: merchant_notes
+          order_id: 1
+          status: 5
+          craete_time: craete_time
+      properties:
+        errcode:
+          description: 系统异常--1;product_id不存在-100002;sku不存在-100004
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        order:
+          $ref: '#/components/schemas/Order'
+      title: OrderGetRsp
+      type: object
+    OrderSearchRsp:
+      description: ""
+      example:
+        errcode: 0
+        total_num: 6
+        errmsg: errmsg
+        orders:
+        - update_time: update_time
+          after_sale_info:
+            on_aftersale_order_cnt: 4
+            aftersale_order_list:
+            - aftersale_order_id: 7
+            - aftersale_order_id: 7
+          openid: openid
+          order_detail:
+            price_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            pay_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            product_infos:
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+          ext_info:
+            customer_notes: customer_notes
+            merchant_notes: merchant_notes
+          order_id: 1
+          status: 5
+          craete_time: craete_time
+        - update_time: update_time
+          after_sale_info:
+            on_aftersale_order_cnt: 4
+            aftersale_order_list:
+            - aftersale_order_id: 7
+            - aftersale_order_id: 7
+          openid: openid
+          order_detail:
+            price_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            pay_info:
+              transaction_id: transaction_id
+              prepay_time: prepay_time
+              pay_method: pay_method
+              prepay_id: prepay_id
+              pay_time: pay_time
+            product_infos:
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+            - finish_aftersale_sku_cnt: 3
+              product_id: 5
+              sku_cnt: 7
+              slae_price: 2
+              sku_id: 2
+              title: title
+              on_aftersale_sku_cnt: 9
+              thumb_img: thumb_img
+              sku_attrs:
+              - attr_key: attr_key
+                attr_value: attr_value
+              - attr_key: attr_key
+                attr_value: attr_value
+          ext_info:
+            customer_notes: customer_notes
+            merchant_notes: merchant_notes
+          order_id: 1
+          status: 5
+          craete_time: craete_time
+      properties:
+        errcode:
+          description: 系统异常--1;product_id不存在-100002;sku不存在-100004
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        total_num:
+          format: int64
+          type: integer
+        orders:
+          items:
+            $ref: '#/components/schemas/Order'
+          type: array
+      title: OrderSearchRsp
+      type: object
+    DeliveryGetCompanyListRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          company_list:
+          - delivery_name: delivery_name
+            delivery_id: delivery_id
+          - delivery_name: delivery_name
+            delivery_id: delivery_id
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;product_id不存在-100002;sku不存在-100004
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/DeliveryGetCompanyListRsp_data'
+      title: DeliveryGetCompanyListRsp
+      type: object
+    DeliverySendRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;无权限调用该api-9401021;订单在售后中,不允许发货&确认收货-108009;发货失败-109000;已经发货-109001
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: DeliverySendRsp
+      type: object
+    CouponGetListRsp:
+      description: ""
+      example:
+        errcode: 0
+        coupons:
+        - update_time: update_time
+          coupon_id: 6
+          stock_info:
+            issued_num: 5
+            used_num: 7
+            receive_num: 2
+          type: 1
+          status: 5
+          craete_time: craete_time
+          coupon_info:
+            valid_info:
+              start_time: start_time
+              valid_day_num: valid_day_num
+              valid_type: valid_type
+              end_time: end_time
+            name: name
+        - update_time: update_time
+          coupon_id: 6
+          stock_info:
+            issued_num: 5
+            used_num: 7
+            receive_num: 2
+          type: 1
+          status: 5
+          craete_time: craete_time
+          coupon_info:
+            valid_info:
+              start_time: start_time
+              valid_day_num: valid_day_num
+              valid_type: valid_type
+              end_time: end_time
+            name: name
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        coupons:
+          items:
+            $ref: '#/components/schemas/Coupon'
+          type: array
+      title: CouponGetListRsp
+      type: object
+    Coupon:
+      description: ""
+      example:
+        update_time: update_time
+        coupon_id: 6
+        stock_info:
+          issued_num: 5
+          used_num: 7
+          receive_num: 2
+        type: 1
+        status: 5
+        craete_time: craete_time
+        coupon_info:
+          valid_info:
+            start_time: start_time
+            valid_day_num: valid_day_num
+            valid_type: valid_type
+            end_time: end_time
+          name: name
+      properties:
+        coupon_id:
+          description: 优惠券
+          format: int64
+          type: integer
+        type:
+          description: 优惠券类型；商品条件折扣券-1;商品满减券-2;商品统一折扣券-3;商品直减券-4;店铺条件折扣券-101;店铺满减券-102;店铺统一折扣券-103;店铺直减券-104
+          format: int32
+          type: integer
+        status:
+          description: 优惠券状态;未生效，编辑中-1;生效-2;已过期-3;已作废-4;删除-5;生效中-100;已过期-101;已经使用-102
+          format: int32
+          type: integer
+        craete_time:
+          description: 优惠券创建时间
+          type: string
+        update_time:
+          description: 优惠券更新时间
+          type: string
+        coupon_info:
+          $ref: '#/components/schemas/Coupon_coupon_info'
+        stock_info:
+          $ref: '#/components/schemas/Coupon_stock_info'
+      title: Coupon
+      type: object
+    CouponPushRsp:
+      description: ""
+      example:
+        errcode: 0
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;优惠券状态不对-109100;优惠券库存不足-109101;优惠券还没过期-109102;优惠券限领-109103
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+      title: CouponPushRsp
+      type: object
+    StoreGetInfoRsp:
+      description: ""
+      example:
+        errcode: 0
+        data:
+          store_name: store_name
+          logo: logo
+          type: 6
+        errmsg: errmsg
+      properties:
+        errcode:
+          description: 系统异常--1;token太长--2;参数有误-9401020;优惠券状态不对-109100;优惠券库存不足-109101;优惠券还没过期-109102;优惠券限领-109103
+          format: int32
+          type: integer
+        errmsg:
+          type: string
+        data:
+          $ref: '#/components/schemas/StoreGetInfoRsp_data'
+      title: StoreGetInfoRsp
+      type: object
+    inline_object:
+      properties:
+        wx_name:
+          type: string
+      required:
+      - wx_name
+      type: object
+    inline_object_1:
+      properties:
+        wx_name:
+          description: 微信号
+          type: string
+        id_card_name:
+          description: 身份证姓名
+          type: string
+        id_card_number:
+          description: 身份证号
+          type: string
+        api_openstore_type:
+          description: 1-整店打包，2-组件开放
+          format: int32
+          type: integer
+        channel_id:
+          description: 渠道号
+          format: int32
+          type: integer
+      required:
+      - api_openstore_type
+      - id_card_name
+      - id_card_number
+      - wx_name
+      type: object
+    inline_object_2:
+      properties:
+        appid:
+          type: string
+        subject_type:
+          description: 主体类型,"4"-个体工商户，营业执照上的主体类型一般为个体户、个体工商户、个体经营。"2"-企业，营业执照上的主体类型一般为有限公司、有限责任公司。
+          type: string
+        busi_license:
+          $ref: '#/components/schemas/BusiLicense'
+        organization_code_info:
+          $ref: '#/components/schemas/OrganizationCodeInfo'
+        id_card_info:
+          $ref: '#/components/schemas/IdCardInfo'
+        super_administrator_info:
+          $ref: '#/components/schemas/SuperAdministratorInfo'
+        merchant_shortname:
+          description: 商户简称 UTF-8格式，中文占3个字节，即最多16个汉字长度。将在支付完成页向买家展示，需与商家的实际售卖商品相符
+            。示例值：腾讯
+          type: string
+        special_qualification:
+          description: 特殊资质 1、根据商户经营业务要求提供相关资质，详情查看《行业对应特殊资质》。2、请提供为“申请商家主体”所属的特殊资质，可授权使用总公司/分公司的特殊资
+            质；3、最多可上传5张照片，请填写通过图片上传接口预先上传图片生成好的MediaID 。
+          items:
+            $ref: '#/components/schemas/SuperAdministratorInfo'
+          type: array
+        supplementary_material:
+          description: 补充材料
+          items:
+            $ref: '#/components/schemas/SuperAdministratorInfo'
+          type: array
+        supplementary_desc:
+          description: 补充描述
+          type: string
+      required:
+      - appid
+      - busi_license
+      - id_card_info
+      - merchant_shortname
+      - subject_type
+      - super_administrator_info
+      type: object
+    inline_object_3:
+      properties:
+        appid:
+          type: string
+        name_info:
+          $ref: '#/components/schemas/NameInfo'
+        return_info:
+          $ref: '#/components/schemas/ReturnInfo'
+      required:
+      - appid
+      - name_info
+      - return_info
+      type: object
+    inline_object_4:
+      properties:
+        f_cat_id:
+          format: int64
+          type: integer
+      required:
+      - f_cat_id
+      type: object
+    inline_object_5:
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+      type: object
+    inline_object_6:
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        need_edit_spu:
+          description: 默认0:获取线上数据, 1:获取草稿数据
+          format: int32
+          type: integer
+      type: object
+    inline_object_7:
+      properties:
+        status:
+          description: 商品状态
+          format: int32
+          type: integer
+        page:
+          description: 第几页（最小填1）
+          format: int32
+          type: integer
+        page_size:
+          description: 每页数量(不超过10,000)
+          format: int32
+          type: integer
+        need_edit_spu:
+          description: 默认0:获取线上数据, 1:获取草稿数据
+          format: int32
+          type: integer
+      required:
+      - page
+      - page_size
+      - status
+      type: object
+    inline_object_8:
+      properties:
+        keyword:
+          type: string
+        page:
+          description: 第几页（最小填1）
+          format: int32
+          type: integer
+        page_size:
+          description: 每页数量(不超过10,000)
+          format: int32
+          type: integer
+      required:
+      - keyword
+      - page
+      - page_size
+      type: object
+    inline_object_9:
+      properties:
+        product_id:
+          format: int64
+          type: integer
+        out_product_id:
+          type: string
+      type: object
+    inline_object_10:
+      properties:
+        product_id:
+          format: int64
+          type: integer
+        out_product_id:
+          type: string
+      type: object
+    inline_object_11:
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        sku_id:
+          description: out_sku_id、sku_id 二选一
+          format: int64
+          type: integer
+        out_sku_id:
+          description: out_sku_id、sku_id二选一
+          type: string
+      type: object
+    inline_object_12:
+      properties:
+        sku_id:
+          description: out_sku_id、sku_id 二选一
+          format: int64
+          type: integer
+        out_sku_id:
+          description: out_sku_id、sku_id 二选一
+          type: string
+        need_edit_sku:
+          description: 默认0:获取线上数据, 1:获取草稿数据
+          format: int32
+          type: integer
+        need_real_stock:
+          description: 默认0:获取草稿库存, 1:获取线上真实库存
+          format: int32
+          type: integer
+      type: object
+    inline_object_13:
+      properties:
+        product_id:
+          description: 商品状态
+          format: int64
+          type: integer
+        need_edit_sku:
+          description: 默认0:获取线上数据, 1:获取草稿数据
+          format: int32
+          type: integer
+        need_real_stock:
+          description: 默认0:获取草稿库存, 1:获取线上真实库存
+          format: int32
+          type: integer
+      required:
+      - product_id
+      type: object
+    inline_object_14:
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        sku_id:
+          description: out_sku_id、sku_id 二选一
+          format: int64
+          type: integer
+        out_sku_id:
+          description: out_sku_id、sku_id二选一
+          type: string
+        sale_price:
+          description: 售卖价格,以分为单位
+          format: int64
+          type: integer
+        market_price:
+          description: 市场价格,以分为单位
+          format: int64
+          type: integer
+      required:
+      - market_price
+      - sale_price
+      type: object
+    inline_object_15:
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        sku_id:
+          description: out_sku_id、sku_id 二选一
+          format: int64
+          type: integer
+        out_sku_id:
+          description: out_sku_id、sku_id二选一
+          type: string
+        type:
+          description: 1:全量更新 2:增量更新
+          format: int32
+          type: integer
+        stock_num:
+          description: 全量更新时，stock_num必须大于0；增量更新时正数增加库存，负数减库存
+          format: int64
+          type: integer
+      required:
+      - stock_num
+      - type
+      type: object
+    inline_object_16:
+      properties:
+        product_id:
+          description: 小商店内部商品ID，与out_product_id二选一
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID，与product_id二选一
+          type: string
+        sku_id:
+          description: out_sku_id、sku_id 二选一
+          format: int64
+          type: integer
+        out_sku_id:
+          description: out_sku_id、sku_id二选一
+          type: string
+      type: object
+    inline_object_17:
+      properties:
+        start_create_time:
+          description: 订单创建时间的搜索开始时间
+          type: string
+        end_create_time:
+          description: 订单创建时间的搜索结束时间
+          type: string
+        start_update_time:
+          description: 订单更新时间的搜索开始时间
+          type: string
+        end_update_time:
+          description: 订单更新时间的搜索结束时间
+          type: string
+        status:
+          description: 订单状态
+          format: int32
+          type: integer
+        page:
+          description: 第几页（最小填1）
+          format: int32
+          type: integer
+        page_size:
+          description: 每页数量(不超过10,000)
+          format: int32
+          type: integer
+      required:
+      - page
+      - page_size
+      - status
+      type: object
+    inline_object_18:
+      properties:
+        order_id:
+          description: 订单ID，可从获取订单列表中获得
+          format: int64
+          type: integer
+      required:
+      - order_id
+      type: object
+    inline_object_19:
+      properties:
+        start_pay_time:
+          description: 订单支付时间的搜索开始时间
+          type: string
+        end_pay_time:
+          description: 订单支付时间的搜索结束时间
+          type: string
+        title:
+          description: 商品标题关键词
+          type: string
+        sku_code:
+          description: 商品编码
+          type: string
+        user_name:
+          description: 收件人
+          type: string
+        tel_number:
+          description: 收件人电话
+          type: string
+        on_aftersale_order_exist:
+          description: 不填该参数:全部订单 0:没有正在售后的订单, 1:正在售后单数量大于等于1的订单
+          format: int32
+          type: integer
+        status:
+          description: 订单状态
+          format: int32
+          type: integer
+        page:
+          description: 第几页（最小填1）
+          format: int32
+          type: integer
+        page_size:
+          description: 每页数量(不超过10,000)
+          format: int32
+          type: integer
+      required:
+      - page
+      - page_size
+      type: object
+    _product_delivery_send_delivery_list:
+      properties:
+        delivery_id:
+          description: 快递公司id
+          type: string
+        waybill_id:
+          description: 快递单号
+          type: string
+      required:
+      - delivery_id
+      - waybill_id
+    inline_object_20:
+      properties:
+        order_id:
+          description: 订单id
+          type: string
+        delivery_list:
+          items:
+            $ref: '#/components/schemas/_product_delivery_send_delivery_list'
+          type: array
+      required:
+      - delivery_list
+      - order_id
+      type: object
+    inline_object_21:
+      properties:
+        type:
+          description: 优惠券类型
+          format: int32
+          type: integer
+        coupon_info:
+          $ref: '#/components/schemas/CouponInfo'
+      required:
+      - coupon_info
+      - type
+      type: object
+    inline_object_22:
+      properties:
+        start_create_time:
+          description: 优惠券创建时间的搜索开始时间
+          type: string
+        end_create_time:
+          description: 优惠券创建时间的搜索结束时间
+          type: string
+        status:
+          description: 优惠券状态
+          format: int32
+          type: integer
+        page:
+          description: 第几页（最小填1）
+          format: int32
+          type: integer
+        page_size:
+          description: 每页数量(不超过10,000)
+          format: int32
+          type: integer
+      required:
+      - end_create_time
+      - page
+      - page_size
+      - start_create_time
+      - status
+      type: object
+    inline_object_23:
+      properties:
+        openid:
+          description: 用户openid
+          type: string
+        coupon_id:
+          description: 优惠券ID，可从获取优惠券中获得
+          format: int64
+          type: integer
+      required:
+      - coupon_id
+      - openid
+      type: object
+    CouponInfo_discount_info_discount_condition:
+      properties:
+        product_cnt:
+          description: 商品折扣券打折金额
+          format: int64
+          type: integer
+        product_ids:
+          description: 商品id，商品折扣券需填写
+          format: int64
+          type: integer
+        product_price:
+          description: 商品价格，满减券需填写
+          format: int64
+          type: integer
+    CouponInfo_discount_info:
+      description: 折扣信息
+      properties:
+        discount_condition:
+          $ref: '#/components/schemas/CouponInfo_discount_info_discount_condition'
+        discount_fee:
+          description: 满减金额
+          format: int64
+          type: integer
+        discount_num:
+          description: 打折商品数量，满减券需填写
+          format: int64
+          type: integer
+      required:
+      - discount_fee
+    CouponInfo_ext_info:
+      description: 优惠券失效信息
+      properties:
+        invalid_time:
+          description: 优惠券失效时间
+          type: string
+        jump_product_id:
+          description: 商品折扣券领取后跳转的商品id
+          format: int64
+          type: integer
+        notes:
+          description: 备注信息
+          type: string
+        valid_time:
+          description: 优惠券有效时间
+          type: string
+      required:
+      - invalid_time
+      - valid_time
+    CouponInfo_promote_info:
+      description: 优惠券失效信息
+      properties:
+        customize_channel:
+          description: 用户自定义推广渠道
+          type: string
+        promote_type:
+          description: 推广类型
+          type: string
+      required:
+      - customize_channel
+      - promote_type
+    CouponInfo_receive_info:
+      description: 优惠券失效信息
+      properties:
+        end_time:
+          description: 优惠券领用结束时间
+          type: string
+        limit_num_one_person:
+          description: 是否限制一人使用
+          format: int64
+          type: integer
+        start_time:
+          description: 优惠券领用开始时间
+          type: string
+        total_num:
+          description: 优惠券领用总数
+          format: int64
+          type: integer
+      required:
+      - end_time
+      - limit_num_one_person
+      - start_time
+      - total_num
+    CouponInfo_valid_info:
+      description: 优惠券失效信息
+      properties:
+        end_time:
+          description: 优惠券有效期结束时间，若填了start必填
+          type: string
+        start_time:
+          description: 优惠券有效期开始时间，和valid_day_num二选一
+          format: int64
+          type: integer
+        valid_day_num:
+          description: 优惠券有效期天数，和start_time二选一
+          format: int64
+          type: integer
+        valid_type:
+          description: 优惠券有效期类型
+          format: int64
+          type: integer
+      required:
+      - valid_day_num
+      - valid_type
+    CheckAuditStatusRsp_data_pay_audit_detail:
+      example:
+        reject_reason: reject_reason
+        param_name: param_name
+      properties:
+        param_name:
+          description: 参数名
+          type: string
+        reject_reason:
+          description: 支付资质驳回原因
+          type: string
+    CheckAuditStatusRsp_data:
+      example:
+        acct_verify_status: 5
+        audit_reject_reasons: audit_reject_reasons
+        registered_appid: registered_appid
+        legal_validation_url: legal_validation_url
+        pay_sign_status: 2
+        merchant_info_status: 1
+        pay_audit_detail:
+          reject_reason: reject_reason
+          param_name: param_name
+        basic_info_status: 5
+        register_status: 6
+      properties:
+        register_status:
+          description: 注册状态 0-成功 1-已发送协议还未签约 2-未发送协议或协议已过期，需发送协议，当register_status为0时以下字段有意义
+          format: int32
+          type: integer
+        merchant_info_status:
+          description: 商家信息状态, 具体含义查看状态枚举值
+          format: int32
+          type: integer
+        acct_verify_status:
+          description: 账户验证状态, 具体含义查看状态枚举值
+          format: int32
+          type: integer
+        basic_info_status:
+          description: 基础信息状态, 具体含义查看状态枚举值
+          format: int32
+          type: integer
+        pay_sign_status:
+          description: 支付签约状态, 具体含义查看状态枚举值
+          format: int32
+          type: integer
+        audit_reject_reasons:
+          description: 基础信息驳回原因
+          type: string
+        legal_validation_url:
+          description: 法人验证链接
+          type: string
+        pay_audit_detail:
+          $ref: '#/components/schemas/CheckAuditStatusRsp_data_pay_audit_detail'
+        registered_appid:
+          description: 注册的appid
+          type: string
+    BrandRsp_brand_info:
+      example:
+        brand_name: brand_name
+        brand_id: 5
+      properties:
+        brand_id:
+          description: 品牌ID
+          format: int64
+          type: integer
+        brand_name:
+          description: 品牌名称
+          type: string
+    SpuAddReq_desc_info:
+      description: 商品详情，图文(目前只支持图片)
+      example:
+        imgs:
+        - imgs
+        - imgs
+      properties:
+        imgs:
+          items:
+            type: string
+          type: array
+      required:
+      - imgs
+    SpuAddReq_express_info:
+      description: 运费信息
+      example:
+        template_id: 5
+      properties:
+        template_id:
+          description: 运费模板ID（先通过获取运费模板接口delivery/get_freight_template拿到）
+          format: int64
+          type: integer
+      required:
+      - template_id
+    SpuAddRsp_data:
+      example:
+        create_time: create_time
+        product_id: 6
+        out_product_id: out_product_id
+      properties:
+        product_id:
+          description: 小商店内部商品ID
+          format: int64
+          type: integer
+        out_product_id:
+          description: 商家自定义商品ID
+          type: string
+        create_time:
+          description: 创建时间
+          type: string
+    SpuGetRsp_data:
+      example:
+        spu:
+          sub_title: sub_title
+          skus:
+          - sku_id: 9
+          - sku_id: 9
+          edit_status: 5
+          desc_info:
+            imgs:
+            - imgs
+            - imgs
+          head_img:
+          - head_img
+          - head_img
+          title: title
+          brand_id: 1
+          attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+          cats:
+          - level: 1
+            cat_id: 6
+          - level: 1
+            cat_id: 6
+          min_price: 2
+          shopcat:
+          - shopcat_id: 7
+          - shopcat_id: 7
+          product_id: 6
+          out_product_id: out_product_id
+          model: model
+          status: 5
+      properties:
+        spu:
+          $ref: '#/components/schemas/Spu'
+    Spu_desc_info:
+      description: 商品详情，图文(目前只支持图片)
+      example:
+        imgs:
+        - imgs
+        - imgs
+      properties:
+        imgs:
+          items:
+            type: string
+          type: array
+    Spu_shopcat:
+      example:
+        shopcat_id: 7
+      properties:
+        shopcat_id:
+          description: 分类ID，对应信息通过 get_shop_cat 接口拿到
+          format: int64
+          type: integer
+    Spu_skus:
+      example:
+        sku_id: 9
+      properties:
+        sku_id:
+          description: skuID
+          format: int64
+          type: integer
+    SpuUpdateReq_express_info:
+      description: 运费信息
+      example:
+        template_id: 1
+      properties:
+        template_id:
+          description: 运费模板ID（先通过获取运费模板接口delivery/get_freight_template拿到）
+          format: int64
+          type: integer
+    SpuUpdateRsp_data:
+      example:
+        update_time: update_time
+        product_id: 6
+        out_product_id: out_product_id
+      properties:
+        product_id:
+          format: int64
+          type: integer
+        out_product_id:
+          type: string
+        update_time:
+          type: string
+    SkuAddRsp_data:
+      example:
+        create_time: create_time
+        sku_id: 6
+      properties:
+        sku_id:
+          description: skuID
+          format: int64
+          type: integer
+        create_time:
+          description: 创建时间
+          type: string
+    SkuUpdateRsp_data:
+      example:
+        update_time: update_time
+        sku_id: 6
+      properties:
+        sku_id:
+          format: int64
+          type: integer
+        update_time:
+          type: string
+    StockUpdateRsp_data:
+      example:
+        update_time: update_time
+      properties:
+        update_time:
+          type: string
+    StockGetRsp_data:
+      example:
+        stock_num: 6
+      properties:
+        stock_num:
+          format: int64
+          type: integer
+    Order_order_detail:
+      description: 主图,多张,列表
+      example:
+        price_info:
+          transaction_id: transaction_id
+          prepay_time: prepay_time
+          pay_method: pay_method
+          prepay_id: prepay_id
+          pay_time: pay_time
+        pay_info:
+          transaction_id: transaction_id
+          prepay_time: prepay_time
+          pay_method: pay_method
+          prepay_id: prepay_id
+          pay_time: pay_time
+        product_infos:
+        - finish_aftersale_sku_cnt: 3
+          product_id: 5
+          sku_cnt: 7
+          slae_price: 2
+          sku_id: 2
+          title: title
+          on_aftersale_sku_cnt: 9
+          thumb_img: thumb_img
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+        - finish_aftersale_sku_cnt: 3
+          product_id: 5
+          sku_cnt: 7
+          slae_price: 2
+          sku_id: 2
+          title: title
+          on_aftersale_sku_cnt: 9
+          thumb_img: thumb_img
+          sku_attrs:
+          - attr_key: attr_key
+            attr_value: attr_value
+          - attr_key: attr_key
+            attr_value: attr_value
+      properties:
+        product_infos:
+          items:
+            $ref: '#/components/schemas/PproductInfo'
+          type: array
+        pay_info:
+          $ref: '#/components/schemas/PayInfo'
+        price_info:
+          $ref: '#/components/schemas/PayInfo'
+    Order_ext_info:
+      example:
+        customer_notes: customer_notes
+        merchant_notes: merchant_notes
+      properties:
+        customer_notes:
+          description: 用户备注
+          type: string
+        merchant_notes:
+          description: 商家备注
+          type: string
+    DeliveryInfo_delivery_product_info:
+      properties:
+        waybill_id:
+          description: 快递单号
+          type: string
+        delivery_id:
+          description: 快递公司编号
+          type: string
+    AfterSaleInfo_aftersale_order_list:
+      example:
+        aftersale_order_id: 7
+      properties:
+        aftersale_order_id:
+          format: int64
+          type: integer
+    DeliveryGetCompanyListRsp_data_company_list:
+      example:
+        delivery_name: delivery_name
+        delivery_id: delivery_id
+      properties:
+        delivery_id:
+          description: 快递公司id
+          type: string
+        delivery_name:
+          description: 快递公司名称
+          type: string
+    DeliveryGetCompanyListRsp_data:
+      example:
+        company_list:
+        - delivery_name: delivery_name
+          delivery_id: delivery_id
+        - delivery_name: delivery_name
+          delivery_id: delivery_id
+      properties:
+        company_list:
+          items:
+            $ref: '#/components/schemas/DeliveryGetCompanyListRsp_data_company_list'
+          type: array
+    Coupon_coupon_info_valid_info:
+      example:
+        start_time: start_time
+        valid_day_num: valid_day_num
+        valid_type: valid_type
+        end_time: end_time
+      properties:
+        valid_type:
+          description: 优惠券有效期类型
+          type: string
+        valid_day_num:
+          description: 优惠券有效天数，valid_type=2时才有意义
+          type: string
+        start_time:
+          description: 优惠券有效期开始时间，valid_type=1时才有意义
+          type: string
+        end_time:
+          description: 优惠券有效期结束时间，valid_type=1时才有意义
+          type: string
+    Coupon_coupon_info:
+      description: 主图,多张,列表
+      example:
+        valid_info:
+          start_time: start_time
+          valid_day_num: valid_day_num
+          valid_type: valid_type
+          end_time: end_time
+        name: name
+      properties:
+        name:
+          description: 优惠券名称
+          type: string
+        valid_info:
+          $ref: '#/components/schemas/Coupon_coupon_info_valid_info'
+    Coupon_stock_info:
+      example:
+        issued_num: 5
+        used_num: 7
+        receive_num: 2
+      properties:
+        issued_num:
+          description: 优惠券发放量
+          format: int64
+          type: integer
+        receive_num:
+          description: 优惠券领用量
+          format: int64
+          type: integer
+        used_num:
+          description: 优惠券已用量
+          format: int64
+          type: integer
+    StoreGetInfoRsp_data:
+      example:
+        store_name: store_name
+        logo: logo
+        type: 6
+      properties:
+        store_name:
+          description: 商店名称
+          type: string
+        logo:
+          description: 商店头像
+          type: string
+        type:
+          description: 1-企业店,;2-个人店
+          format: int32
+          type: integer
